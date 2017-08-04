@@ -2,6 +2,7 @@ import sublime, sublime_plugin
 import os.path
 import os
 import subprocess
+import time
 from os.path import dirname, realpath
 
 MY_PLUGIN = dirname(realpath(__file__))
@@ -35,12 +36,13 @@ class PHPTools(sublime_plugin.EventListener):
 		if self.psr:
 			psr_toggle = "--psr"
 
-		bakUpFileTypes = ['php', 'phtml', 'phps', 'xml', 'css', 'sql']
+		bakUpFileTypes = ['php', 'phtml', 'phps', 'xml', 'css', 'sql', 'sass', 'less']
 		## if "php" != extension:
 		if extension not in bakUpFileTypes:
 			return False
 
-		full_file_name_tmp = full_file_name + "-tmp"
+		fileNameSuffix = time.strftime("%Y%m%d-%H%M%S")
+		full_file_name_tmp = full_file_name + "-tmp" + "_" + fileNameSuffix
 		cmd = "\"{}\" \"{}\" {} \"{}\" > \"{}\"; \"{}\" -l \"{}\" && mv \"{}\" \"{}\";".format(
 			self.php_path,
 			self.formatter_path,
